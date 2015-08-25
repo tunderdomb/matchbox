@@ -1,0 +1,29 @@
+{
+  "name": "matchbox",
+  "version": "0.0.1",
+  "description": "A series of modules for building apps and the web",
+  "main": "matchbox.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tunderdomb/matchbox.git"
+  },
+  "keywords": [
+    "app",
+    "model",
+    "view",
+    "pubsub",
+    "component"
+  ],
+  "author": "tunderdomb",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tunderdomb/matchbox/issues"
+  },
+  "homepage": "https://github.com/tunderdomb/matchbox"
+}
