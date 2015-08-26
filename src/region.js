@@ -1,14 +1,11 @@
 var core = require("./core")
+var Relay = require("./relay")
+var Widget = require("./widget")
 
-var Region = core(function () {})
-
-module.exports = Region.register
-
-Region.statics(function (Region) {
-
-  Region.subRegion = function (name, select) {
-    Region.get(name, function () {
-      return this.querySelector(select)
-    })
+var Region = module.exports = core({
+  onCreate: function (element, parent) {
+    this.relay = new Relay(this.name, parent)
   }
 })
+
+Region.include(Widget)

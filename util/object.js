@@ -9,7 +9,9 @@ object.accessor = function (obj, name, get, set) {
 
 object.defineGetter = function (obj, name, fn) {
   Object.defineProperty(obj, name, {
-    get: fn
+    get: typeof fn == "function" ? fn : function () {
+      return fn
+    }
   })
 }
 

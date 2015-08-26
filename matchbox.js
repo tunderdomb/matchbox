@@ -1,5 +1,4 @@
 var internals = require("./src/internals")
-var registry = require("./src/registry")
 var core = require("./src/core")
 var component = require("./src/component")
 
@@ -12,15 +11,17 @@ var radio = require("./src/radio")
 var channel = require("./src/channel")
 
 var region = require("./src/region")
+var widget = require("./src/widget")
 var element = require("./src/element")
 
 var model = require("./src/Model")
 
 var matchbox = module.exports = {}
 
-matchbox.relay = relay
-matchbox.region = relay
-matchbox.element = element
-matchbox.model = model
+matchbox.relay = relay.register
+matchbox.region = region.register
+matchbox.widget = widget.register
+matchbox.element = element.register
+matchbox.model = model.register
 matchbox.radio = radio
 matchbox.channel = channel

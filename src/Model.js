@@ -1,8 +1,6 @@
 var core = require("./core")
 
-var Model = core(function () {})
-
-module.exports = Model.register
+var Model = module.exports = core(function () {})
 
 Model.statics(function (Class) {
 

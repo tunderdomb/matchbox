@@ -6,7 +6,12 @@ module.exports = function component (onCreate) {
   }
 
   internals(Matchbox)
-  if (onCreate) Matchbox.onCreate(onCreate)
+  if (typeof onCreate == "function") {
+    Matchbox.onCreate(onCreate)
+  }
+  else {
+    Matchbox.proto(onCreate)
+  }
 
   return Matchbox
 }

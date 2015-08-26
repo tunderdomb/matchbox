@@ -1,9 +1,21 @@
 var component = require("./component")
-var registry = require("./registry")
 
-module.exports = function core(onCreate) {
+module.exports = function core (onCreate) {
   var Core = component(onCreate)
-  Core.register = registry(Core)
+  var registry = new Map()
+
+  Core.registry = registry
+  Core.register = function register (name, onCreate) {
+    if (registry.has(name)) {
+      return registry.get(name)
+    }
+
+    var Super = component(onCreate)
+    Super.inherit(Core)
+    Super.get("name", name)
+    registry.set(name, Super)
+    return Super
+  }
 
   return Core
 }

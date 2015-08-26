@@ -5,7 +5,7 @@ var MapSet = require("../util/MapSet")
 var ArrayMap = require("../util/ArrayMap")
 var defaults = require("../util/defaults")
 
-var Relay = core(function (name, parent) {
+var Relay = module.exports = core(function (name, parent) {
   this.name = name || ""
   this.parent = parent || null
   this.active = true
@@ -13,8 +13,6 @@ var Relay = core(function (name, parent) {
   this._connections = new ArrayMap()
   this._intentFilters = new MapSet()
 })
-
-module.exports = Relay.register
 
 Relay.get("root", function root () {
   var component = this

@@ -6,26 +6,31 @@ var constructors = new Set()
 module.exports = function internals(Class) {
   var prototype = Class.prototype
   var parents = Class.parents = []
-  var statics = Class.statics = []
+  var setups = Class.setups = []
+  var statics = Class.statics = new Map()
 
   constructors.add(Class)
 
-  Class.statics = function (fn) {
-    if (Array.isArray(fn)) {
-      fn.forEach(function () {
-        fn(Class)
-        statics.push(fn)
-      })
-    }
-    else {
-      fn(Class)
-      statics.push(fn)
-    }
+  /**
+   * For setting up static functions, specially functions that access a closure.
+   * It's useful when inheriting from a class where a static function is accessing a closure.
+   * This way those closures are always re-defined for the super class, when calling the  provided setup function.
+   * */
+  Class.setup = function (fn) {
+    fn(Class)
+    setups.push(fn)
+    return Class
+  }
+
+  /**
+   * For defining static functions that doesn't need a closure.
+   * */
+  Class.static = function (name, fn) {
+    statics.set(name, fn)
     return Class
   }
 
   Class.extend = function (Super) {
-    extend(Super, Class)
     internals(Super)
     Super.inherit(Class)
     return Super
@@ -36,8 +41,13 @@ module.exports = function internals(Class) {
     Class.prototype.constructor = Class
     if (constructors.has(Base)) {
       parents = parents.concat(Base.parents)
-      statics = statics.concat(Base.statics)
-      Class.statics(statics)
+      setups = setups.concat(Base.setups)
+      Base.statics.forEach(function (name, fn) {
+        Class.static(name, fn)
+      })
+      setups.forEach(function (setup) {
+        Class.setup(setup)
+      })
     }
     Class.onCreate(Base)
     return Class
