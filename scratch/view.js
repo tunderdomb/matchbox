@@ -1,53 +1,79 @@
 var matchbox = require("matchbox")
 
-var Header = matchbox.region("Header", function () {
-  this.appBar = this.component("appBar")
+var Header = matchbox.region.extend({
+  name: "Header",
 
-  this.appBar.hello()
-  this.deleage("event", "appBar", function (e, appBar) {
-    appBar.hello()
-  })
-  this.event("click", function () {})
+  constructor: function (){
+    this.appBar = this.component("appBar")
 
-  this.announce("roundtrip", "data", function (intent) {})
-  this.react("roundtrip", function (intent, cb) {
-    cb()
-  })
+    this.appBar.hello()
+    this.deleage("event", "appBar", function( e, appBar ){
+      appBar.hello()
+    })
+    this.event("click", function(){})
 
-  this.relay("intent", "data")
-  this.receive("intent", function (intent) {})
+    this.announce("roundtrip", "data", function( intent ){})
+    this.react("roundtrip", function( intent, cb ){
+      cb()
+    })
 
-  this.invoke("app.hello", "data")
-  this.invoke("app.async", "data", function (result) {
+    this.relay("intent", "data")
+    this.receive("intent", function( intent ){})
 
-  })
+    this.invoke("app.hello", "data")
+    this.invoke("app.async", "data", function( result ){
+
+    })
+  }
 })
 
 // =======
 
 var header = new Header(null)
 
+var AppBar = matchbox.region.extend({
+  name: "app-bar",
 
-var AppBar = matchbox.region("app-bar", function () {
-  this.action("click", "element:close", function (e, button) {
-    this.relay("")
-  })
+  constructor: function () {
+    this.action("click", "element:close", function (e, button) {
+      this.relay("")
+    })
+  }
 })
 
-var FilterBar = matchbox.region("filter-bar", function () {
-  this.search = this.node(":search", "search")
-  this.orderSelect = this.node(":order", "select")
-  this.cardList = this.node(":cards", "sortable-list")
-  this.cards = this.node(":card")
-  this.selects = this.node("select", "select")
+var FilterBar = matchbox.region.extend({
+  name: "filter-bar",
 
-  this.action("select", "select", function (e, button) {
-    this.relay("")
-  })
+  constructor: function(){
+    this.search = this.node(":search", "search")
+    this.orderSelect = this.node(":order", "select")
+    this.cardList = this.node(":cards", "sortable-list")
+    this.cards = this.node(":card")
+    this.selects = this.node("select", "select")
+
+    this.action("select", "select", function (e, button) {
+      this.relay("")
+    })
+  }
 })
 
 
-var Select = matchbox.widget("select", {
+var Select = matchbox.widget.extend({
+  name: "select",
+
+  attribute: {
+    open: false,
+    value: function(){
+      return this.selectedOption.value
+    }
+  },
+
+  get: {
+    selectedOption: function(){
+      return this.select(":option", {selected: true})
+    }
+  },
+
   onCreate: function () {
     this.label = this.node(":label")
     this.menu = this.node(":menu")
@@ -74,12 +100,3 @@ var Select = matchbox.widget("select", {
     }
   }
 })
-
-Select.attribute("open", false)
-Select.attribute("value", function () {
-  return this.selectedOption.value
-})
-Select.get("selectedOption", function () {
-  return this.select(":option", {selected: true})
-})
-

@@ -1,14 +1,16 @@
 var core = require("./core")
 
-var Model = module.exports = core(function () {})
+var Model = module.exports = core({
+  setup: function(Class){
 
-Model.statics(function (Class) {
+    Class.can = function (execute, routine) {
+      Class.method(execute, routine)
+      return Class
+    }
 
-  Class.can = function (execute, routine) {
-    Class.method(execute, routine)
-  }
-
-  Class.has = function (property, definition) {
-    Class.get(property, definition)
+    Class.has = function (property, definition) {
+      Class.get(property, definition)
+      return Class
+    }
   }
 })

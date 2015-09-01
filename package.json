@@ -25,5 +25,8 @@
   "bugs": {
     "url": "https://github.com/tunderdomb/matchbox/issues"
   },
-  "homepage": "https://github.com/tunderdomb/matchbox"
+  "homepage": "https://github.com/tunderdomb/matchbox",
+  "dependencies": {
+    "camelcase": "^1.2.1"
+  }
 }

@@ -3,9 +3,10 @@ var Relay = require("./relay")
 var Widget = require("./widget")
 
 var Region = module.exports = core({
-  onCreate: function (element, parent) {
-    this.relay = new Relay(this.name, parent)
+  inherit: Widget,
+  augment: Relay.prototype,
+
+  constructor: function(element, name, parent){
+    Relay.call(this, name, parent)
   }
 })
-
-Region.include(Widget)

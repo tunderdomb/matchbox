@@ -9,6 +9,10 @@ module.exports = function internals(Class) {
   var setups = Class.setups = []
   var statics = Class.statics = new Map()
 
+  object.defineGetter(Class, "statics", statics)
+  object.defineGetter(Class, "setups", setups)
+  object.defineGetter(Class, "parents", parents)
+
   constructors.add(Class)
 
   /**
@@ -42,9 +46,10 @@ module.exports = function internals(Class) {
     if (constructors.has(Base)) {
       parents = parents.concat(Base.parents)
       setups = setups.concat(Base.setups)
-      Base.statics.forEach(function (name, fn) {
-        Class.static(name, fn)
-      })
+      extend(Class, Base)
+      //Base.statics.forEach(function (name, fn) {
+      //  Class.static(name, fn)
+      //})
       setups.forEach(function (setup) {
         Class.setup(setup)
       })
@@ -54,8 +59,16 @@ module.exports = function internals(Class) {
   }
 
   Class.include = function (Other) {
-    Class.proto(Other.prototype)
-    Class.onCreate(Other)
+    function include( Other ){
+      Class.proto(Other.prototype)
+      Class.onCreate(Other)
+    }
+    if( Array.isArray(Other) ){
+      Other.forEach(include)
+    }
+    else {
+      include(Other)
+    }
     return Class
   }
 
